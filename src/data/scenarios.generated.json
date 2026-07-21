@@ -1,0 +1,1306 @@
+{
+  "comment": "Arquivo gerado por scripts/import-papeis.mjs a partir de Papeis.xlsx. Não editar manualmente.",
+  "rolesPerScenario": 7,
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "Aeroporto internacional",
+      "roles": [
+        "Piloto",
+        "Comissário de bordo",
+        "Controlador de tráfego aéreo",
+        "Agente de segurança",
+        "Funcionário do check-in",
+        "Despachante de bagagem",
+        "Passageiro"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Hospital",
+      "roles": [
+        "Cirurgião",
+        "Enfermeiro",
+        "Anestesista",
+        "Radiologista",
+        "Recepcionista",
+        "Paciente",
+        "Paramédico"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Escola",
+      "roles": [
+        "Diretor",
+        "Professor de matemática",
+        "Inspetor de alunos",
+        "Merendeira",
+        "Aluno",
+        "Bibliotecário",
+        "Zelador"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Restaurante italiano",
+      "roles": [
+        "Chef",
+        "Sous-chef",
+        "Garçom",
+        "Sommelier",
+        "Maître",
+        "Pizzaiolo",
+        "Cliente"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Estação espacial",
+      "roles": [
+        "Comandante",
+        "Engenheiro de voo",
+        "Cientista",
+        "Médico",
+        "Especialista em comunicações",
+        "Operador de sistemas",
+        "Turista espacial"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Submarino",
+      "roles": [
+        "Capitão",
+        "Imediato",
+        "Sonarista",
+        "Engenheiro-chefe",
+        "Torpedista",
+        "Cozinheiro de bordo",
+        "Marinheiro"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Navio pirata",
+      "roles": [
+        "Capitão pirata",
+        "Imediato",
+        "Navegador",
+        "Artilheiro",
+        "Carpinteiro naval",
+        "Cozinheiro",
+        "Prisioneiro"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Castelo medieval",
+      "roles": [
+        "Rei",
+        "Rainha",
+        "Cavaleiro",
+        "Bobo da corte",
+        "Cozinheiro real",
+        "Guarda",
+        "Prisioneiro"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Circo",
+      "roles": [
+        "Mestre de cerimônias",
+        "Trapezista",
+        "Palhaço",
+        "Domador",
+        "Malabarista",
+        "Bilheteiro",
+        "Espectador"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Banco",
+      "roles": [
+        "Gerente",
+        "Caixa",
+        "Segurança",
+        "Consultor de investimentos",
+        "Cliente",
+        "Auditor",
+        "Assaltante"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Cassino",
+      "roles": [
+        "Crupiê",
+        "Gerente de salão",
+        "Segurança",
+        "Bartender",
+        "Jogador profissional",
+        "Turista",
+        "Trapaceiro"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Delegacia",
+      "roles": [
+        "Delegado",
+        "Investigador",
+        "Escrivão",
+        "Policial",
+        "Perito criminal",
+        "Detento",
+        "Advogado"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Tribunal",
+      "roles": [
+        "Juiz",
+        "Promotor",
+        "Advogado de defesa",
+        "Oficial de justiça",
+        "Jurado",
+        "Réu",
+        "Testemunha"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Prisão",
+      "roles": [
+        "Diretor",
+        "Agente penitenciário",
+        "Médico",
+        "Cozinheiro",
+        "Capelão",
+        "Detento",
+        "Visitante"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Quartel de bombeiros",
+      "roles": [
+        "Comandante",
+        "Bombeiro motorista",
+        "Operador de rádio",
+        "Socorrista",
+        "Mecânico",
+        "Bombeiro novato",
+        "Inspetor"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Estúdio de cinema",
+      "roles": [
+        "Diretor",
+        "Ator principal",
+        "Atriz coadjuvante",
+        "Operador de câmera",
+        "Técnico de som",
+        "Maquiador",
+        "Produtor"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Teatro",
+      "roles": [
+        "Diretor artístico",
+        "Ator",
+        "Figurinista",
+        "Iluminador",
+        "Contrarregra",
+        "Bilheteiro",
+        "Espectador"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Museu",
+      "roles": [
+        "Curador",
+        "Restaurador",
+        "Segurança",
+        "Guia",
+        "Pesquisador",
+        "Visitante",
+        "Ladrão de arte"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Biblioteca",
+      "roles": [
+        "Bibliotecário-chefe",
+        "Arquivista",
+        "Pesquisador",
+        "Estudante",
+        "Segurança",
+        "Técnico de acervo",
+        "Visitante"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Parque de diversões",
+      "roles": [
+        "Operador de montanha-russa",
+        "Mascote",
+        "Técnico de manutenção",
+        "Vendedor de algodão-doce",
+        "Segurança",
+        "Visitante",
+        "Fotógrafo"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Zoológico",
+      "roles": [
+        "Tratador de felinos",
+        "Veterinário",
+        "Biólogo",
+        "Guia",
+        "Bilheteiro",
+        "Segurança",
+        "Visitante"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Aquário",
+      "roles": [
+        "Mergulhador",
+        "Biólogo marinho",
+        "Veterinário",
+        "Alimentador de tubarões",
+        "Guia",
+        "Técnico de aquários",
+        "Visitante"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Praia",
+      "roles": [
+        "Salva-vidas",
+        "Vendedor ambulante",
+        "Surfista",
+        "Turista",
+        "Policial da praia",
+        "Pescador",
+        "Instrutor de mergulho"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Resort tropical",
+      "roles": [
+        "Gerente",
+        "Recepcionista",
+        "Bartender",
+        "Recreador",
+        "Camareira",
+        "Hóspede",
+        "Salva-vidas"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Hotel de luxo",
+      "roles": [
+        "Gerente geral",
+        "Concierge",
+        "Recepcionista",
+        "Camareira",
+        "Chef executivo",
+        "Segurança",
+        "Hóspede"
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Estação de esqui",
+      "roles": [
+        "Instrutor de esqui",
+        "Patrulheiro da neve",
+        "Operador de teleférico",
+        "Técnico de equipamentos",
+        "Atendente do aluguel",
+        "Turista",
+        "Médico"
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Acampamento",
+      "roles": [
+        "Monitor",
+        "Cozinheiro",
+        "Guarda florestal",
+        "Campista",
+        "Enfermeiro",
+        "Guia de trilha",
+        "Contador de histórias"
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Expedição na floresta tropical",
+      "roles": [
+        "Líder da expedição",
+        "Botânico",
+        "Zoólogo",
+        "Guia local",
+        "Fotógrafo",
+        "Médico",
+        "Carregador"
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Base antártica",
+      "roles": [
+        "Chefe da estação",
+        "Glaciologista",
+        "Meteorologista",
+        "Mecânico",
+        "Médico",
+        "Cozinheiro",
+        "Operador de rádio"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Expedição no deserto",
+      "roles": [
+        "Arqueólogo",
+        "Guia beduíno",
+        "Geólogo",
+        "Motorista",
+        "Fotógrafo",
+        "Médico",
+        "Turista"
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Sítio arqueológico",
+      "roles": [
+        "Arqueólogo-chefe",
+        "Estudante de arqueologia",
+        "Restaurador",
+        "Topógrafo",
+        "Operário",
+        "Segurança",
+        "Jornalista"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Pirâmide egípcia",
+      "roles": [
+        "Faraó",
+        "Sacerdote",
+        "Escriba",
+        "Guarda real",
+        "Arquiteto",
+        "Construtor",
+        "Saqueador de tumbas"
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Vila viking",
+      "roles": [
+        "Chefe do clã",
+        "Guerreiro",
+        "Ferreiro",
+        "Construtor naval",
+        "Skald",
+        "Agricultor",
+        "Mercador"
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Aldeia samurai",
+      "roles": [
+        "Daimyo",
+        "Samurai",
+        "Arqueiro",
+        "Monge",
+        "Ferreiro",
+        "Camponês",
+        "Mensageiro"
+      ]
+    },
+    {
+      "id": 35,
+      "name": "Palácio imperial",
+      "roles": [
+        "Imperador",
+        "Conselheiro",
+        "Guarda imperial",
+        "Diplomata",
+        "Cozinheiro",
+        "Músico da corte",
+        "Criado"
+      ]
+    },
+    {
+      "id": 36,
+      "name": "Fazenda",
+      "roles": [
+        "Fazendeiro",
+        "Veterinário",
+        "Tratorista",
+        "Vaqueiro",
+        "Agrônomo",
+        "Trabalhador rural",
+        "Comprador"
+      ]
+    },
+    {
+      "id": 37,
+      "name": "Vinícola",
+      "roles": [
+        "Enólogo",
+        "Sommelier",
+        "Viticultor",
+        "Mestre de adega",
+        "Guia",
+        "Comprador",
+        "Colhedor"
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Fábrica de automóveis",
+      "roles": [
+        "Gerente de produção",
+        "Engenheiro de processo",
+        "Operador de robô",
+        "Inspetor de qualidade",
+        "Montador",
+        "Almoxarife",
+        "Técnico de manutenção"
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Usina nuclear",
+      "roles": [
+        "Diretor",
+        "Engenheiro nuclear",
+        "Operador de reator",
+        "Técnico de radiação",
+        "Segurança",
+        "Inspetor",
+        "Eletricista"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Plataforma de petróleo",
+      "roles": [
+        "Gerente da plataforma",
+        "Perfurador",
+        "Geólogo",
+        "Engenheiro de segurança",
+        "Mergulhador",
+        "Operador de guindaste",
+        "Cozinheiro"
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Mina subterrânea",
+      "roles": [
+        "Supervisor",
+        "Minerador",
+        "Engenheiro de minas",
+        "Geólogo",
+        "Operador de explosivos",
+        "Socorrista",
+        "Mecânico"
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Canteiro de obras",
+      "roles": [
+        "Engenheiro civil",
+        "Mestre de obras",
+        "Pedreiro",
+        "Eletricista",
+        "Encanador",
+        "Operador de guindaste",
+        "Fiscal"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Laboratório secreto",
+      "roles": [
+        "Cientista-chefe",
+        "Geneticista",
+        "Químico",
+        "Técnico de laboratório",
+        "Segurança",
+        "Cobaia",
+        "Agente infiltrado"
+      ]
+    },
+    {
+      "id": 44,
+      "name": "Laboratório farmacêutico",
+      "roles": [
+        "Pesquisador",
+        "Farmacêutico",
+        "Técnico de laboratório",
+        "Gerente de qualidade",
+        "Voluntário clínico",
+        "Auditor",
+        "Segurança"
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Centro de controle espacial",
+      "roles": [
+        "Diretor de voo",
+        "Controlador de trajetória",
+        "Operador de comunicações",
+        "Meteorologista",
+        "Engenheiro de sistemas",
+        "Médico de voo",
+        "Visitante VIP"
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Data center",
+      "roles": [
+        "Administrador de sistemas",
+        "Engenheiro de redes",
+        "Técnico de hardware",
+        "Segurança",
+        "Gerente de infraestrutura",
+        "Auditor de TI",
+        "Fornecedor"
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Escritório de startup",
+      "roles": [
+        "Fundador",
+        "Programador",
+        "Designer de UX",
+        "Gerente de produto",
+        "Vendedor",
+        "Investidor",
+        "Estagiário"
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Agência de publicidade",
+      "roles": [
+        "Diretor de criação",
+        "Redator",
+        "Diretor de arte",
+        "Executivo de atendimento",
+        "Analista de mídia",
+        "Fotógrafo",
+        "Cliente"
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Redação de jornal",
+      "roles": [
+        "Editor-chefe",
+        "Repórter",
+        "Fotógrafo",
+        "Diagramador",
+        "Revisor",
+        "Colunista",
+        "Fonte anônima"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Estúdio de rádio",
+      "roles": [
+        "Locutor",
+        "Produtor",
+        "Técnico de áudio",
+        "Repórter",
+        "Convidado",
+        "Operador de telefone",
+        "Ouvinte premiado"
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Estúdio de televisão",
+      "roles": [
+        "Apresentador",
+        "Diretor",
+        "Operador de câmera",
+        "Roteirista",
+        "Maquiador",
+        "Técnico de iluminação",
+        "Convidado"
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Show de rock",
+      "roles": [
+        "Vocalista",
+        "Guitarrista",
+        "Baterista",
+        "Técnico de som",
+        "Roadie",
+        "Segurança",
+        "Fã"
+      ]
+    },
+    {
+      "id": 53,
+      "name": "Festival de música",
+      "roles": [
+        "DJ",
+        "Produtor de palco",
+        "Segurança",
+        "Vendedor de food truck",
+        "Paramédico",
+        "Artista",
+        "Frequentador"
+      ]
+    },
+    {
+      "id": 54,
+      "name": "Companhia de balé",
+      "roles": [
+        "Primeira bailarina",
+        "Bailarino",
+        "Coreógrafo",
+        "Maestro",
+        "Figurinista",
+        "Fisioterapeuta",
+        "Espectador"
+      ]
+    },
+    {
+      "id": 55,
+      "name": "Ópera",
+      "roles": [
+        "Soprano",
+        "Tenor",
+        "Maestro",
+        "Diretor cênico",
+        "Cenógrafo",
+        "Contrarregra",
+        "Espectador"
+      ]
+    },
+    {
+      "id": 56,
+      "name": "Estádio de futebol",
+      "roles": [
+        "Atacante",
+        "Goleiro",
+        "Treinador",
+        "Árbitro",
+        "Gandula",
+        "Repórter esportivo",
+        "Torcedor"
+      ]
+    },
+    {
+      "id": 57,
+      "name": "Quadra de basquete",
+      "roles": [
+        "Armador",
+        "Pivô",
+        "Técnico",
+        "Árbitro",
+        "Mascote",
+        "Fisioterapeuta",
+        "Torcedor"
+      ]
+    },
+    {
+      "id": 58,
+      "name": "Autódromo",
+      "roles": [
+        "Piloto",
+        "Chefe de equipe",
+        "Mecânico",
+        "Engenheiro de corrida",
+        "Fiscal de pista",
+        "Repórter",
+        "Espectador"
+      ]
+    },
+    {
+      "id": 59,
+      "name": "Arena de boxe",
+      "roles": [
+        "Boxeador",
+        "Treinador",
+        "Árbitro",
+        "Médico do ringue",
+        "Promotor",
+        "Comentarista",
+        "Torcedor"
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Academia de ginástica",
+      "roles": [
+        "Personal trainer",
+        "Instrutor de spinning",
+        "Recepcionista",
+        "Nutricionista",
+        "Aluno",
+        "Faxineiro",
+        "Gerente"
+      ]
+    },
+    {
+      "id": 61,
+      "name": "Spa",
+      "roles": [
+        "Massagista",
+        "Esteticista",
+        "Terapeuta",
+        "Recepcionista",
+        "Gerente",
+        "Cliente",
+        "Técnico de sauna"
+      ]
+    },
+    {
+      "id": 62,
+      "name": "Salão de beleza",
+      "roles": [
+        "Cabeleireiro",
+        "Barbeiro",
+        "Manicure",
+        "Maquiador",
+        "Recepcionista",
+        "Cliente",
+        "Gerente"
+      ]
+    },
+    {
+      "id": 63,
+      "name": "Supermercado",
+      "roles": [
+        "Gerente",
+        "Caixa",
+        "Repositor",
+        "Açougueiro",
+        "Padeiro",
+        "Segurança",
+        "Cliente"
+      ]
+    },
+    {
+      "id": 64,
+      "name": "Shopping center",
+      "roles": [
+        "Gerente do shopping",
+        "Lojista",
+        "Segurança",
+        "Atendente da praça de alimentação",
+        "Faxineiro",
+        "Cliente",
+        "Entregador"
+      ]
+    },
+    {
+      "id": 65,
+      "name": "Feira livre",
+      "roles": [
+        "Feirante de frutas",
+        "Peixeiro",
+        "Vendedor de pastel",
+        "Fiscal",
+        "Carregador",
+        "Músico de rua",
+        "Cliente"
+      ]
+    },
+    {
+      "id": 66,
+      "name": "Padaria",
+      "roles": [
+        "Padeiro",
+        "Confeiteiro",
+        "Balconista",
+        "Caixa",
+        "Entregador",
+        "Gerente",
+        "Cliente"
+      ]
+    },
+    {
+      "id": 67,
+      "name": "Cafeteria",
+      "roles": [
+        "Barista",
+        "Gerente",
+        "Caixa",
+        "Confeiteiro",
+        "Fornecedor",
+        "Cliente habitual",
+        "Crítico gastronômico"
+      ]
+    },
+    {
+      "id": 68,
+      "name": "Cervejaria artesanal",
+      "roles": [
+        "Mestre cervejeiro",
+        "Operador de fermentação",
+        "Químico de qualidade",
+        "Guia",
+        "Bartender",
+        "Distribuidor",
+        "Visitante"
+      ]
+    },
+    {
+      "id": 69,
+      "name": "Cozinha de reality show",
+      "roles": [
+        "Chef jurado",
+        "Participante",
+        "Sous-chef",
+        "Apresentador",
+        "Cinegrafista",
+        "Produtor",
+        "Degustador"
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Casamento",
+      "roles": [
+        "Noivo",
+        "Noiva",
+        "Celebrante",
+        "Padrinho",
+        "Fotógrafo",
+        "Cerimonialista",
+        "Convidado"
+      ]
+    },
+    {
+      "id": 71,
+      "name": "Festa de aniversário infantil",
+      "roles": [
+        "Aniversariante",
+        "Pai",
+        "Mãe",
+        "Animador",
+        "Mágico",
+        "Fotógrafo",
+        "Convidado criança"
+      ]
+    },
+    {
+      "id": 72,
+      "name": "Cruzeiro marítimo",
+      "roles": [
+        "Capitão",
+        "Oficial de navegação",
+        "Diretor de entretenimento",
+        "Bartender",
+        "Camareiro",
+        "Passageiro",
+        "Médico de bordo"
+      ]
+    },
+    {
+      "id": 73,
+      "name": "Trem de luxo",
+      "roles": [
+        "Maquinista",
+        "Condutor",
+        "Chef de bordo",
+        "Camareiro",
+        "Passageiro",
+        "Segurança",
+        "Ladrão de joias"
+      ]
+    },
+    {
+      "id": 74,
+      "name": "Estação de metrô",
+      "roles": [
+        "Maquinista",
+        "Agente de estação",
+        "Segurança",
+        "Técnico de manutenção",
+        "Vendedor ambulante",
+        "Passageiro",
+        "Fiscal"
+      ]
+    },
+    {
+      "id": 75,
+      "name": "Rodoviária",
+      "roles": [
+        "Motorista de ônibus",
+        "Atendente de guichê",
+        "Carregador de bagagem",
+        "Segurança",
+        "Passageiro",
+        "Fiscal",
+        "Vendedor de lanches"
+      ]
+    },
+    {
+      "id": 76,
+      "name": "Posto de gasolina",
+      "roles": [
+        "Frentista",
+        "Gerente",
+        "Caixa",
+        "Mecânico",
+        "Caminhoneiro",
+        "Cliente",
+        "Fiscal"
+      ]
+    },
+    {
+      "id": 77,
+      "name": "Oficina mecânica",
+      "roles": [
+        "Mecânico-chefe",
+        "Eletricista automotivo",
+        "Funileiro",
+        "Aprendiz",
+        "Atendente",
+        "Cliente",
+        "Fornecedor de peças"
+      ]
+    },
+    {
+      "id": 78,
+      "name": "Concessionária de carros",
+      "roles": [
+        "Vendedor",
+        "Gerente de vendas",
+        "Mecânico",
+        "Avaliador de usados",
+        "Analista financeiro",
+        "Cliente",
+        "Recepcionista"
+      ]
+    },
+    {
+      "id": 79,
+      "name": "Porto marítimo",
+      "roles": [
+        "Capitão de navio",
+        "Estivador",
+        "Operador de guindaste",
+        "Fiscal da aduana",
+        "Agente marítimo",
+        "Segurança",
+        "Caminhoneiro"
+      ]
+    },
+    {
+      "id": 80,
+      "name": "Farol",
+      "roles": [
+        "Faroleiro",
+        "Técnico de manutenção",
+        "Meteorologista",
+        "Agente da guarda costeira",
+        "Pescador",
+        "Fotógrafo",
+        "Visitante"
+      ]
+    },
+    {
+      "id": 81,
+      "name": "Ilha deserta",
+      "roles": [
+        "Líder dos náufragos",
+        "Médico",
+        "Engenheiro",
+        "Cozinheiro",
+        "Explorador",
+        "Pescador",
+        "Turista"
+      ]
+    },
+    {
+      "id": 82,
+      "name": "Base militar",
+      "roles": [
+        "Comandante",
+        "Sargento",
+        "Soldado",
+        "Médico militar",
+        "Operador de radar",
+        "Mecânico",
+        "Oficial de inteligência"
+      ]
+    },
+    {
+      "id": 83,
+      "name": "Porta-aviões",
+      "roles": [
+        "Almirante",
+        "Piloto de caça",
+        "Controlador de convés",
+        "Mecânico de aeronaves",
+        "Operador de radar",
+        "Médico",
+        "Marinheiro"
+      ]
+    },
+    {
+      "id": 84,
+      "name": "Campo de batalha medieval",
+      "roles": [
+        "General",
+        "Arqueiro",
+        "Cavaleiro",
+        "Curandeiro",
+        "Ferreiro",
+        "Mensageiro",
+        "Prisioneiro"
+      ]
+    },
+    {
+      "id": 85,
+      "name": "Bunker apocalíptico",
+      "roles": [
+        "Líder do abrigo",
+        "Médico",
+        "Engenheiro",
+        "Agricultor hidropônico",
+        "Segurança",
+        "Cozinheiro",
+        "Refugiado"
+      ]
+    },
+    {
+      "id": 86,
+      "name": "Colônia em Marte",
+      "roles": [
+        "Comandante",
+        "Geólogo planetário",
+        "Engenheiro de habitat",
+        "Botânico",
+        "Médico",
+        "Piloto de rover",
+        "Técnico de comunicações"
+      ]
+    },
+    {
+      "id": 87,
+      "name": "Nave alienígena",
+      "roles": [
+        "Comandante alienígena",
+        "Cientista alienígena",
+        "Piloto",
+        "Guarda",
+        "Intérprete universal",
+        "Humano capturado",
+        "Mecânico"
+      ]
+    },
+    {
+      "id": 88,
+      "name": "Laboratório da máquina do tempo",
+      "roles": [
+        "Inventor",
+        "Físico",
+        "Historiador",
+        "Técnico",
+        "Financiador",
+        "Viajante temporal",
+        "Segurança"
+      ]
+    },
+    {
+      "id": 89,
+      "name": "Escola de magia",
+      "roles": [
+        "Diretor",
+        "Professor de poções",
+        "Professor de feitiços",
+        "Bibliotecário",
+        "Aluno veterano",
+        "Aluno novato",
+        "Zelador"
+      ]
+    },
+    {
+      "id": 90,
+      "name": "Covil de supervilão",
+      "roles": [
+        "Supervilão",
+        "Capanga-chefe",
+        "Cientista maluco",
+        "Hacker",
+        "Guarda",
+        "Refém",
+        "Mercenário"
+      ]
+    },
+    {
+      "id": 91,
+      "name": "Sede de super-heróis",
+      "roles": [
+        "Líder da equipe",
+        "Velocista",
+        "Telepata",
+        "Inventor",
+        "Médico",
+        "Agente do governo",
+        "Estagiário"
+      ]
+    },
+    {
+      "id": 92,
+      "name": "Cidade submarina",
+      "roles": [
+        "Prefeito",
+        "Engenheiro da cúpula",
+        "Biólogo marinho",
+        "Operador de oxigênio",
+        "Comerciante",
+        "Mergulhador",
+        "Turista"
+      ]
+    },
+    {
+      "id": 93,
+      "name": "Reino das fadas",
+      "roles": [
+        "Rainha das fadas",
+        "Guardião da floresta",
+        "Curandeira",
+        "Ferreiro mágico",
+        "Mensageiro",
+        "Humano perdido",
+        "Músico"
+      ]
+    },
+    {
+      "id": 94,
+      "name": "Abrigo durante apocalipse zumbi",
+      "roles": [
+        "Líder dos sobreviventes",
+        "Médico",
+        "Batedor",
+        "Mecânico",
+        "Cozinheiro",
+        "Vigia",
+        "Recém-chegado"
+      ]
+    },
+    {
+      "id": 95,
+      "name": "Casa assombrada",
+      "roles": [
+        "Médium",
+        "Caçador de fantasmas",
+        "Historiador",
+        "Proprietário",
+        "Eletricista",
+        "Turista",
+        "Fantasma"
+      ]
+    },
+    {
+      "id": 96,
+      "name": "Convenção de quadrinhos",
+      "roles": [
+        "Cosplayer",
+        "Quadrinista",
+        "Vendedor de colecionáveis",
+        "Organizador",
+        "Segurança",
+        "Fã",
+        "Dublador"
+      ]
+    },
+    {
+      "id": 97,
+      "name": "Feira de tecnologia",
+      "roles": [
+        "Fundador de startup",
+        "Investidor",
+        "Demonstrador de produto",
+        "Jornalista",
+        "Técnico de estande",
+        "Visitante",
+        "Concorrente"
+      ]
+    },
+    {
+      "id": 98,
+      "name": "Estação de pesquisa oceânica",
+      "roles": [
+        "Oceanógrafo",
+        "Mergulhador científico",
+        "Engenheiro de submarino",
+        "Biólogo",
+        "Operador de sonar",
+        "Médico",
+        "Cozinheiro"
+      ]
+    },
+    {
+      "id": 99,
+      "name": "Embaixada",
+      "roles": [
+        "Embaixador",
+        "Diplomata",
+        "Adido militar",
+        "Intérprete",
+        "Segurança",
+        "Jornalista",
+        "Requerente de visto"
+      ]
+    },
+    {
+      "id": 100,
+      "name": "Leilão de arte",
+      "roles": [
+        "Leiloeiro",
+        "Colecionador",
+        "Avaliador",
+        "Marchand",
+        "Segurança",
+        "Restaurador",
+        "Jornalista"
+      ]
+    }
+  ]
+}
