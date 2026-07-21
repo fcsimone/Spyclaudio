@@ -17,7 +17,7 @@
             ".validate": "newData.isString() && ((!data.exists() && newData.val() == 'lobby') || (data.val() == 'lobby' && (newData.val() == 'distributed' || newData.val() == 'closed')) || (data.val() == 'distributed' && (newData.val() == 'voting' || newData.val() == 'closed')) || (data.val() == 'voting' && (newData.val() == 'result' || newData.val() == 'closed')) || (data.val() == 'result' && newData.val() == 'closed'))"
           },
           "spyCount": {
-            ".validate": "newData.isNumber() && (newData.val() == 1 || newData.val() == 2) && root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'"
+            ".validate": "newData.isNumber() && (newData.val() == 1 || newData.val() == 2) && newData.parent().child('status').val() == 'lobby'"
           },
           "maxPlayers": {
             ".validate": "newData.isNumber() && newData.val() >= 3 && newData.val() <= 9"

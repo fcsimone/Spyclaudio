@@ -42,6 +42,14 @@ npm run dev              # noutro terminal
 
 Os emuladores exigem **JDK 21 ou superior** instalado.
 
+Se você estiver atrás de um proxy corporativo, o SDK do Realtime Database tenta abrir o
+WebSocket através dele e ignora o `NO_PROXY`, o que trava a conexão com o emulador local.
+Nesse caso, rode os testes com as variáveis de proxy desligadas:
+
+```bash
+HTTPS_PROXY= HTTP_PROXY= npm run test:rules
+```
+
 ## Comandos
 
 | Comando | O que faz |
