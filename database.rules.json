@@ -7,7 +7,7 @@
       "$roomCode": {
         "meta": {
           ".read": "auth != null",
-          ".validate": "newData.hasChildren(['hostUid', 'status', 'spyCount', 'maxPlayers', 'createdAt'])",
+          ".validate": "newData.hasChildren(['hostUid', 'status', 'spyCount', 'maxPlayers', 'createdAt', 'playerCount'])",
           ".write": "auth != null && ($roomCode.length == 6) && ((!data.exists() && newData.child('hostUid').val() == auth.uid && newData.child('status').val() == 'lobby') || (data.child('hostUid').val() == auth.uid))",
 
           "hostUid": {
@@ -24,6 +24,10 @@
           },
           "createdAt": {
             ".validate": "newData.val() == now && !data.exists()"
+          },
+          "playerCount": {
+            ".write": "auth != null && root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'",
+            ".validate": "newData.isNumber() && newData.val() >= 1 && newData.val() <= newData.parent().child('maxPlayers').val() && (!data.exists() ? newData.val() == 1 : (newData.val() == data.val() + 1 || (newData.val() == data.val() - 1 && root.child('rooms').child($roomCode).child('meta').child('hostUid').val() == auth.uid)))"
           },
           "votingStartedAt": {
             ".validate": "newData.val() == now && !data.exists()"
@@ -42,7 +46,7 @@
         "players": {
           ".read": "auth != null && data.child(auth.uid).exists()",
           "$uid": {
-            ".write": "auth != null && ((auth.uid == $uid && (!data.exists() ? (root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby' && root.child('rooms').child($roomCode).child('players').numChildren() < root.child('rooms').child($roomCode).child('meta').child('maxPlayers').val()) : (newData.exists() || root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'))) || (root.child('rooms').child($roomCode).child('meta').child('hostUid').val() == auth.uid && root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'))",
+            ".write": "auth != null && ((auth.uid == $uid && !data.exists() && newData.parent().parent().child('meta').child('status').val() == 'lobby' && newData.parent().parent().child('meta').child('playerCount').val() == (data.parent().parent().child('meta').child('playerCount').exists() ? data.parent().parent().child('meta').child('playerCount').val() + 1 : 1)) || (auth.uid == $uid && data.exists() && newData.exists()) || (auth.uid == $uid && data.exists() && !newData.exists() && root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby') || (root.child('rooms').child($roomCode).child('meta').child('hostUid').val() == auth.uid && root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'))",
             ".validate": "newData.hasChildren(['name', 'normalizedName', 'joinedAt'])",
 
             "name": {

@@ -84,6 +84,7 @@ describe('criação de sala', () => {
           spyCount: 1,
           maxPlayers: 8,
           createdAt: { '.sv': 'timestamp' },
+          playerCount: 1,
         }),
     );
   });
@@ -98,6 +99,7 @@ describe('criação de sala', () => {
           spyCount: 1,
           maxPlayers: 8,
           createdAt: { '.sv': 'timestamp' },
+          playerCount: 1,
         }),
     );
   });
@@ -110,6 +112,7 @@ describe('criação de sala', () => {
         spyCount: 1,
         maxPlayers: 8,
         createdAt: 12345,
+        playerCount: 1,
       }),
     );
   });
@@ -120,6 +123,7 @@ describe('criação de sala', () => {
       status: 'lobby',
       maxPlayers: 8,
       createdAt: { '.sv': 'timestamp' },
+      playerCount: 1,
     };
     await assertFails(db(HOST_UID).ref(`rooms/NOVAS1/meta`).set({ ...base, spyCount: 3 }));
     await assertFails(
@@ -137,6 +141,7 @@ describe('criação de sala', () => {
           spyCount: 1,
           maxPlayers: 8,
           createdAt: { '.sv': 'timestamp' },
+          playerCount: 1,
           segredo: 'Hospital',
         }),
     );
@@ -144,10 +149,28 @@ describe('criação de sala', () => {
 });
 
 describe('entrada de jogadores', () => {
-  it('permite entrar reservando o nome', async () => {
+  const entrada = (uid: string, name: string, normalized: string, playerCount: number) => ({
+    [`players/${uid}`]: {
+      name,
+      normalizedName: normalized,
+      joinedAt: { '.sv': 'timestamp' },
+      connected: true,
+    },
+    'meta/playerCount': playerCount,
+  });
+
+  it('permite entrar reservando o nome e incrementando a contagem', async () => {
     await seedLobby(env);
     await assertSucceeds(db(OTHER_UID).ref(`rooms/${ROOM}/normalizedNames/caio`).set(OTHER_UID));
     await assertSucceeds(
+      db(OTHER_UID).ref(`rooms/${ROOM}`).update(entrada(OTHER_UID, 'Caio', 'caio', 3)),
+    );
+  });
+
+  it('nega entrar sem incrementar a contagem', async () => {
+    await seedLobby(env);
+    await db(OTHER_UID).ref(`rooms/${ROOM}/normalizedNames/caio`).set(OTHER_UID);
+    await assertFails(
       db(OTHER_UID)
         .ref(`rooms/${ROOM}/players/${OTHER_UID}`)
         .set({
@@ -159,16 +182,24 @@ describe('entrada de jogadores', () => {
     );
   });
 
+  it('nega incrementar a contagem em mais de 1 para entrar', async () => {
+    await seedLobby(env);
+    await db(OTHER_UID).ref(`rooms/${ROOM}/normalizedNames/caio`).set(OTHER_UID);
+    await assertFails(
+      db(OTHER_UID).ref(`rooms/${ROOM}`).update(entrada(OTHER_UID, 'Caio', 'caio', 5)),
+    );
+  });
+
+  it('nega que um jogador comum diminua a contagem', async () => {
+    await seedLobby(env);
+    await assertFails(db(PLAYER_UID).ref(`rooms/${ROOM}/meta/playerCount`).set(1));
+    await assertSucceeds(db(HOST_UID).ref(`rooms/${ROOM}/meta/playerCount`).set(1));
+  });
+
   it('nega registrar jogador sem reservar o nome antes', async () => {
     await seedLobby(env);
     await assertFails(
-      db(OTHER_UID)
-        .ref(`rooms/${ROOM}/players/${OTHER_UID}`)
-        .set({
-          name: 'Caio',
-          normalizedName: 'caio',
-          joinedAt: { '.sv': 'timestamp' },
-        }),
+      db(OTHER_UID).ref(`rooms/${ROOM}`).update(entrada(OTHER_UID, 'Caio', 'caio', 3)),
     );
   });
 
@@ -194,33 +225,39 @@ describe('entrada de jogadores', () => {
     await seedDistributed(env);
     await assertFails(db(OTHER_UID).ref(`rooms/${ROOM}/normalizedNames/caio`).set(OTHER_UID));
     await assertFails(
-      db(OTHER_UID)
-        .ref(`rooms/${ROOM}/players/${OTHER_UID}`)
-        .set({ name: 'Caio', normalizedName: 'caio', joinedAt: { '.sv': 'timestamp' } }),
+      db(OTHER_UID).ref(`rooms/${ROOM}`).update(entrada(OTHER_UID, 'Caio', 'caio', 3)),
     );
   });
 
   it('nega entrada quando a sala atinge a capacidade', async () => {
-    const players: Record<string, unknown> = {};
-    const names: Record<string, string> = {};
-    for (let i = 0; i < 8; i += 1) {
-      const uid = `uid-lotacao-${String(i).padStart(14, '0')}`;
-      players[uid] = { name: `P${i}`, normalizedName: `p${i}`, joinedAt: Date.now() };
-      names[`p${i}`] = uid;
-    }
     await env.withSecurityRulesDisabled(async (context) => {
-      await context.database().ref(`rooms/${ROOM}`).set({
-        meta: { hostUid: HOST_UID, status: 'lobby', spyCount: 1, maxPlayers: 8, createdAt: Date.now() },
-        players,
-        normalizedNames: names,
-      });
+      await context
+        .database()
+        .ref(`rooms/${ROOM}`)
+        .set({
+          meta: {
+            hostUid: HOST_UID,
+            status: 'lobby',
+            spyCount: 1,
+            maxPlayers: 8,
+            createdAt: Date.now(),
+            playerCount: 8,
+          },
+          players: {
+            [HOST_UID]: { name: 'Ana', normalizedName: 'ana', joinedAt: Date.now() },
+          },
+          normalizedNames: { ana: HOST_UID },
+        });
     });
 
     await assertSucceeds(db(OTHER_UID).ref(`rooms/${ROOM}/normalizedNames/caio`).set(OTHER_UID));
+    // playerCount já está no limite: qualquer incremento é recusado.
     await assertFails(
-      db(OTHER_UID)
-        .ref(`rooms/${ROOM}/players/${OTHER_UID}`)
-        .set({ name: 'Caio', normalizedName: 'caio', joinedAt: { '.sv': 'timestamp' } }),
+      db(OTHER_UID).ref(`rooms/${ROOM}`).update(entrada(OTHER_UID, 'Caio', 'caio', 9)),
+    );
+    // E entrar sem incrementar também é recusado.
+    await assertFails(
+      db(OTHER_UID).ref(`rooms/${ROOM}`).update(entrada(OTHER_UID, 'Caio', 'caio', 8)),
     );
   });
 
@@ -229,12 +266,15 @@ describe('entrada de jogadores', () => {
     await db(OTHER_UID).ref(`rooms/${ROOM}/normalizedNames/caio`).set(OTHER_UID);
     await assertFails(
       db(OTHER_UID)
-        .ref(`rooms/${ROOM}/players/${OTHER_UID}`)
-        .set({
-          name: 'Caio',
-          normalizedName: 'caio',
-          joinedAt: { '.sv': 'timestamp' },
-          isSpy: false,
+        .ref(`rooms/${ROOM}`)
+        .update({
+          [`players/${OTHER_UID}`]: {
+            name: 'Caio',
+            normalizedName: 'caio',
+            joinedAt: { '.sv': 'timestamp' },
+            isSpy: false,
+          },
+          'meta/playerCount': 3,
         }),
     );
   });
@@ -243,13 +283,7 @@ describe('entrada de jogadores', () => {
     await seedLobby(env);
     await db(OTHER_UID).ref(`rooms/${ROOM}/normalizedNames/caio`).set(OTHER_UID);
     await assertFails(
-      db(OTHER_UID)
-        .ref(`rooms/${ROOM}/players/${OTHER_UID}`)
-        .set({
-          name: 'C'.repeat(40),
-          normalizedName: 'caio',
-          joinedAt: { '.sv': 'timestamp' },
-        }),
+      db(OTHER_UID).ref(`rooms/${ROOM}`).update(entrada(OTHER_UID, 'C'.repeat(40), 'caio', 3)),
     );
   });
 });

@@ -34,6 +34,7 @@ export async function seedLobby(env: RulesTestEnvironment, overrides: Record<str
         spyCount: 1,
         maxPlayers: 8,
         createdAt: Date.now(),
+        playerCount: 2,
       },
       players: {
         [HOST_UID]: { name: 'Ana', normalizedName: 'ana', joinedAt: Date.now(), connected: true },
@@ -54,6 +55,7 @@ export async function seedDistributed(env: RulesTestEnvironment) {
       spyCount: 1,
       maxPlayers: 8,
       createdAt: Date.now(),
+      playerCount: 2,
     },
     secrets: {
       [HOST_UID]: { isSpy: false, scenarioId: 1, role: 'Piloto' },
@@ -71,6 +73,7 @@ export async function seedVoting(env: RulesTestEnvironment, deadlineOffsetMs = 1
       spyCount: 1,
       maxPlayers: 8,
       createdAt: Date.now(),
+      playerCount: 2,
       votingStartedAt: Date.now(),
       votingDeadline: Date.now() + deadlineOffsetMs,
     },

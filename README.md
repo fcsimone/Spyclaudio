@@ -94,6 +94,10 @@ As regras estão em `database.rules.json` e negam tudo por padrão. Em resumo:
 - toda leitura e escrita exige `auth != null`;
 - a sala só é criada por quem se declara anfitrião com o próprio UID;
 - só entra quem chega no lobby, respeitando o limite de jogadores;
+- a lotação é garantida pelo contador `meta/playerCount`: a linguagem de regras do
+  Realtime Database **não consegue contar filhos** (não existem `numChildren()` nem
+  `getChildrenCount()` ali), então a entrada de um jogador só é aceita se, na mesma
+  escrita atômica, o contador subir exatamente 1 — e ele nunca passa de `maxPlayers`;
 - nomes são reservados de forma atômica em `normalizedNames`, sem duplicidade;
 - `secrets/{uid}` é legível apenas pelo próprio jogador — nem o anfitrião lê o nó inteiro;
 - só o anfitrião grava segredos, e apenas uma vez por jogador;
@@ -129,9 +133,12 @@ O sorteio usa `crypto.getRandomValues` com amostragem sem viés e embaralhamento
 4. **A lista de jogadores do lobby é legível por qualquer usuário autenticado que conheça o
    código da sala.** São apenas apelidos; o segredo real é o código. Papéis, votos e resultado
    continuam restritos aos membros.
-5. **Não há limpeza automática de salas antigas.** Sem backend não existe coleta agendada
+5. **Sair da sala não devolve a vaga; remoção pelo anfitrião, sim.** Só o anfitrião pode
+   decrementar `meta/playerCount` — se qualquer jogador pudesse, seria possível burlar o
+   limite de lotação. O erro fica sempre no lado seguro: no máximo sobram vagas a menos.
+6. **Não há limpeza automática de salas antigas.** Sem backend não existe coleta agendada
    confiável; o anfitrião encerra a sala ao final.
-6. **Uma rodada por sala.** Para jogar de novo, crie uma sala nova.
+7. **Uma rodada por sala.** Para jogar de novo, crie uma sala nova.
 
 ## Publicação
 

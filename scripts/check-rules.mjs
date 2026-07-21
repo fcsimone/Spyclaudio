@@ -56,6 +56,9 @@ for (const [path, value] of all) {
 
 // 4. Só métodos existentes na linguagem de regras do Realtime Database.
 // O emulador só acusa isso ao subir; aqui o erro aparece antes.
+// ATENÇÃO: a linguagem de regras NÃO tem como contar filhos. Não existem
+// numChildren() nem getChildrenCount() — isso é API do SDK cliente, não das
+// regras. Lotação é controlada pelo contador meta/playerCount.
 const ALLOWED_METHODS = new Set([
   // RuleDataSnapshot
   'val',
@@ -68,7 +71,6 @@ const ALLOWED_METHODS = new Set([
   'isNumber',
   'isString',
   'isBoolean',
-  'numChildren',
   // String
   'contains',
   'beginsWith',

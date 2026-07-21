@@ -26,6 +26,13 @@ export interface RoomMeta {
   spyCount: SpyCount;
   maxPlayers: number;
   createdAt: number;
+  /**
+   * Vagas consumidas na sala. As regras do Realtime Database não conseguem
+   * contar filhos, então a lotação é garantida por este contador: só é possível
+   * criar um jogador se, na mesma escrita atômica, ele for incrementado em 1 —
+   * e ele nunca pode passar de maxPlayers.
+   */
+  playerCount: number;
   votingStartedAt?: number;
   votingDeadline?: number;
   closedReason?: string;
@@ -80,25 +87,31 @@ export async function createRoom(params: {
 
   for (let attempt = 0; attempt < 8; attempt += 1) {
     const code = generateRoomCode();
-    const metaRef = ref(db, `${roomPath(code)}/meta`);
-    const existing = await get(metaRef);
+    const existing = await get(ref(db, `${roomPath(code)}/meta`));
     if (existing.exists()) continue;
 
-    await set(metaRef, {
-      hostUid: params.hostUid,
-      status: 'lobby',
-      spyCount: params.spyCount,
-      maxPlayers: CAPACITY[params.spyCount].max,
-      createdAt: serverTimestamp(),
+    // A reserva do nome precisa existir antes: a regra do jogador valida que
+    // normalizedNames/{nome} já aponta para o próprio uid.
+    await set(ref(db, `${roomPath(code)}/normalizedNames/${normalizedName}`), params.hostUid);
+
+    // Sala e anfitrião numa única escrita atômica, com playerCount = 1.
+    await update(ref(db, roomPath(code)), {
+      meta: {
+        hostUid: params.hostUid,
+        status: 'lobby',
+        spyCount: params.spyCount,
+        maxPlayers: CAPACITY[params.spyCount].max,
+        createdAt: serverTimestamp(),
+        playerCount: 1,
+      },
+      [`players/${params.hostUid}`]: {
+        name,
+        normalizedName,
+        joinedAt: serverTimestamp(),
+        connected: true,
+      },
     });
 
-    await set(ref(db, `${roomPath(code)}/normalizedNames/${normalizedName}`), params.hostUid);
-    await set(ref(db, `${roomPath(code)}/players/${params.hostUid}`), {
-      name,
-      normalizedName,
-      joinedAt: serverTimestamp(),
-      connected: true,
-    });
     registerPresence(code, params.hostUid);
     return code;
   }
@@ -136,20 +149,43 @@ export async function joinRoom(params: {
     throw new RoomError('nome-em-uso', 'Este nome já está em uso nesta sala. Escolha outro.');
   }
 
-  try {
-    await set(ref(db, `${roomPath(params.code)}/players/${params.uid}`), {
-      name,
-      normalizedName,
-      joinedAt: serverTimestamp(),
-      connected: true,
-    });
-  } catch {
+  // O registro do jogador e o incremento de playerCount precisam ir na mesma
+  // escrita atômica — é assim que as regras garantem a lotação. Se duas pessoas
+  // entrarem ao mesmo tempo, uma das escritas é recusada e tentamos de novo com
+  // a contagem atualizada.
+  let entered = false;
+  for (let attempt = 0; attempt < 5 && !entered; attempt += 1) {
+    const countSnapshot = await get(ref(db, `${roomPath(params.code)}/meta/playerCount`));
+    const current = (countSnapshot.val() as number | null) ?? 0;
+    if (current >= meta.maxPlayers) {
+      await remove(nameRef).catch(() => undefined);
+      throw new RoomError('sala-cheia', `A sala está cheia (limite de ${meta.maxPlayers} jogadores).`);
+    }
+
+    try {
+      await update(ref(db, roomPath(params.code)), {
+        [`players/${params.uid}`]: {
+          name,
+          normalizedName,
+          joinedAt: serverTimestamp(),
+          connected: true,
+        },
+        'meta/playerCount': current + 1,
+      });
+      entered = true;
+    } catch {
+      // Colisão com outra entrada simultânea: relê a contagem e tenta de novo.
+    }
+  }
+
+  if (!entered) {
     await remove(nameRef).catch(() => undefined);
     throw new RoomError(
       'entrada-recusada',
-      `Não foi possível entrar. A sala pode estar cheia (limite de ${meta.maxPlayers}) ou a partida já começou.`,
+      'Não foi possível entrar na sala. Ela pode ter enchido ou a partida já começou.',
     );
   }
+
   registerPresence(params.code, params.uid);
 }
 
@@ -160,15 +196,30 @@ export function registerPresence(code: string, uid: string): void {
   onDisconnect(connectedRef).set(false).catch(() => undefined);
 }
 
-/** Remoção de participante pelo anfitrião, antes do início. */
+/**
+ * Remoção de participante pelo anfitrião, antes do início.
+ * Só o anfitrião pode decrementar playerCount, então só a remoção feita por ele
+ * devolve a vaga à sala.
+ */
 export async function removePlayer(code: string, uid: string, normalizedName: string): Promise<void> {
   const db = getFirebaseDatabase();
-  await remove(ref(db, `${roomPath(code)}/players/${uid}`));
-  await remove(ref(db, `${roomPath(code)}/normalizedNames/${normalizedName}`));
+  const countSnapshot = await get(ref(db, `${roomPath(code)}/meta/playerCount`));
+  const current = (countSnapshot.val() as number | null) ?? 1;
+
+  await update(ref(db, roomPath(code)), {
+    [`players/${uid}`]: null,
+    [`normalizedNames/${normalizedName}`]: null,
+    ...(current > 1 ? { 'meta/playerCount': current - 1 } : {}),
+  });
 }
 
+/** Saída do próprio jogador. A vaga permanece consumida (só o anfitrião a devolve). */
 export async function leaveRoom(code: string, uid: string, normalizedName: string): Promise<void> {
-  await removePlayer(code, uid, normalizedName).catch(() => undefined);
+  const db = getFirebaseDatabase();
+  await update(ref(db, roomPath(code)), {
+    [`players/${uid}`]: null,
+    [`normalizedNames/${normalizedName}`]: null,
+  }).catch(() => undefined);
 }
 
 export function subscribeMeta(code: string, callback: (meta: RoomMeta | null) => void): Unsubscribe {
