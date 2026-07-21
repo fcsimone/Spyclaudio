@@ -54,7 +54,43 @@ for (const [path, value] of all) {
   if (!value.includes('auth')) errors.push(`Regra em ${path} não menciona auth.`);
 }
 
-// 4. Proteções essenciais que devem existir explicitamente.
+// 4. Só métodos existentes na linguagem de regras do Realtime Database.
+// O emulador só acusa isso ao subir; aqui o erro aparece antes.
+const ALLOWED_METHODS = new Set([
+  // RuleDataSnapshot
+  'val',
+  'child',
+  'parent',
+  'hasChild',
+  'hasChildren',
+  'exists',
+  'getPriority',
+  'isNumber',
+  'isString',
+  'isBoolean',
+  'numChildren',
+  // String
+  'contains',
+  'beginsWith',
+  'endsWith',
+  'replace',
+  'toLowerCase',
+  'toUpperCase',
+  'matches',
+  'length',
+]);
+
+for (const [path, value] of all) {
+  if (typeof value !== 'string') continue;
+  for (const match of value.matchAll(/\.([A-Za-z_]\w*)\s*\(/g)) {
+    const method = match[1];
+    if (!ALLOWED_METHODS.has(method)) {
+      errors.push(`Método inexistente "${method}()" em ${path}.`);
+    }
+  }
+}
+
+// 5. Proteções essenciais que devem existir explicitamente.
 const room = rules.rooms?.$roomCode;
 if (!room) errors.push('Caminho rooms/$roomCode ausente.');
 

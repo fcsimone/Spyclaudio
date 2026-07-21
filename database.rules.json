@@ -42,7 +42,7 @@
         "players": {
           ".read": "auth != null && data.child(auth.uid).exists()",
           "$uid": {
-            ".write": "auth != null && ((auth.uid == $uid && (!data.exists() ? (root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby' && root.child('rooms').child($roomCode).child('players').getChildrenCount() < root.child('rooms').child($roomCode).child('meta').child('maxPlayers').val()) : (newData.exists() || root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'))) || (root.child('rooms').child($roomCode).child('meta').child('hostUid').val() == auth.uid && root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'))",
+            ".write": "auth != null && ((auth.uid == $uid && (!data.exists() ? (root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby' && root.child('rooms').child($roomCode).child('players').numChildren() < root.child('rooms').child($roomCode).child('meta').child('maxPlayers').val()) : (newData.exists() || root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'))) || (root.child('rooms').child($roomCode).child('meta').child('hostUid').val() == auth.uid && root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby'))",
             ".validate": "newData.hasChildren(['name', 'normalizedName', 'joinedAt'])",
 
             "name": {
