@@ -4,7 +4,6 @@ import {
   onValue,
   ref,
   remove,
-  runTransaction,
   serverTimestamp,
   set,
   update,
@@ -14,7 +13,7 @@ import { getFirebaseDatabase } from './client';
 import { generateRoomCode } from '../game/roomCode';
 import { normalizeName, sanitizeName } from '../game/names';
 import { CAPACITY, VOTING_DURATION_MS } from '../game/types';
-import type { RoomStatus, SpyCount } from '../game/types';
+import type { Distribution, RoomStatus, SpyCount } from '../game/types';
 import { distribute } from '../game/distribution';
 import { tally } from '../game/voting';
 import type { Ballot } from '../game/voting';
@@ -75,6 +74,49 @@ export class RoomError extends Error {
 
 const roomPath = (code: string) => `rooms/${code}`;
 
+/**
+ * O sorteio feito pelo anfitrião, guardado só na memória da aba dele.
+ * É a fonte para publicar o resultado: as regras impedem qualquer um — inclusive
+ * o anfitrião — de reler o nó `secrets` inteiro, e é assim que os papéis alheios
+ * ficam protegidos. Se o anfitrião recarregar a página, a sala já se perde de
+ * qualquer forma, então não há o que recuperar.
+ */
+const distribuicoes = new Map<string, Distribution>();
+
+export function esquecerDistribuicao(code: string): void {
+  distribuicoes.delete(code);
+}
+
+/**
+ * Diferença entre o relógio do servidor e o local, em ms.
+ * `.info/serverTimeOffset` é um nó sintético do cliente: só chega por
+ * assinatura, `get()` não funciona nele.
+ */
+export function readServerOffset(db = getFirebaseDatabase()): Promise<number> {
+  return new Promise((resolve) => {
+    let settled = false;
+    // eslint-disable-next-line prefer-const -- atribuído após o uso em `finish`
+    let unsubscribe: Unsubscribe | undefined;
+
+    // O callback pode disparar de forma síncrona, antes de `unsubscribe` existir.
+    const finish = (offset: number) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      queueMicrotask(() => unsubscribe?.());
+      resolve(offset);
+    };
+
+    const timer = setTimeout(() => finish(0), 3000);
+
+    unsubscribe = onValue(
+      ref(db, '.info/serverTimeOffset'),
+      (snapshot) => finish((snapshot.val() as number | null) ?? 0),
+      () => finish(0),
+    );
+  });
+}
+
 /** Cria a sala com código único e insere o anfitrião como jogador. */
 export async function createRoom(params: {
   hostUid: string;
@@ -90,12 +132,11 @@ export async function createRoom(params: {
     const existing = await get(ref(db, `${roomPath(code)}/meta`));
     if (existing.exists()) continue;
 
-    // A reserva do nome precisa existir antes: a regra do jogador valida que
-    // normalizedNames/{nome} já aponta para o próprio uid.
-    await set(ref(db, `${roomPath(code)}/normalizedNames/${normalizedName}`), params.hostUid);
-
-    // Sala e anfitrião numa única escrita atômica, com playerCount = 1.
+    // Sala, anfitrião e reserva de nome numa única escrita atômica, com
+    // playerCount = 1. Precisa ser atômico: as regras validam o estado
+    // resultante, e nenhuma dessas partes é válida isolada das outras.
     await update(ref(db, roomPath(code)), {
+      [`normalizedNames/${normalizedName}`]: params.hostUid,
       meta: {
         hostUid: params.hostUid,
         status: 'lobby',
@@ -140,13 +181,19 @@ export async function joinRoom(params: {
   // A lista de jogadores só é legível por membros da sala, então a capacidade
   // é verificada pelas regras do banco no momento da escrita.
 
-  // Reserva atômica do nome normalizado.
+  // Reserva do nome. A exclusividade é garantida pela regra do banco
+  // (`!data.exists()`), que recusa a escrita se outra pessoa chegou primeiro —
+  // é uma verificação atômica no servidor, sem precisar de transação.
   const nameRef = ref(db, `${roomPath(params.code)}/normalizedNames/${normalizedName}`);
-  const reservation = await runTransaction(nameRef, (current: string | null) =>
-    current === null || current === params.uid ? params.uid : undefined,
-  );
-  if (!reservation.committed || reservation.snapshot.val() !== params.uid) {
-    throw new RoomError('nome-em-uso', 'Este nome já está em uso nesta sala. Escolha outro.');
+  try {
+    await set(nameRef, params.uid);
+  } catch {
+    const current = await get(nameRef).catch(() => null);
+    if (current?.val() === params.uid) {
+      // Já era nosso: seguimos.
+    } else {
+      throw new RoomError('nome-em-uso', 'Este nome já está em uso nesta sala. Escolha outro.');
+    }
   }
 
   // O registro do jogador e o incremento de playerCount precisam ir na mesma
@@ -277,13 +324,14 @@ export async function startGame(params: {
   }
   await update(ref(db, roomPath(params.code)), updates);
   await set(ref(db, `${roomPath(params.code)}/meta/status`), 'distributed');
+
+  distribuicoes.set(params.code, distribution);
 }
 
 export async function startVoting(code: string): Promise<void> {
   const db = getFirebaseDatabase();
   // O horário de início vem do servidor; o prazo é derivado dele.
-  const offsetSnapshot = await get(ref(db, '.info/serverTimeOffset'));
-  const offset = (offsetSnapshot.val() as number | null) ?? 0;
+  const offset = await readServerOffset(db);
   const deadline = Date.now() + offset + VOTING_DURATION_MS;
 
   await update(ref(db, `${roomPath(code)}/meta`), {
@@ -311,19 +359,24 @@ export async function finalizeRound(params: {
   code: string;
   playerIds: readonly string[];
   deadline: number;
+  /** Sorteio do anfitrião; por padrão, o que ficou guardado em memória. */
+  distribution?: Distribution;
 }): Promise<void> {
   const db = getFirebaseDatabase();
-  const [votesSnapshot, secretsSnapshot] = await Promise.all([
-    get(ref(db, `${roomPath(params.code)}/votes`)),
-    get(ref(db, `${roomPath(params.code)}/secrets`)),
-  ]);
 
-  const secrets = (secretsSnapshot.val() as Record<string, PlayerSecret> | null) ?? {};
-  const spyIds = Object.entries(secrets)
-    .filter(([, secret]) => secret.isSpy)
-    .map(([uid]) => uid);
-  const scenarioId =
-    Object.values(secrets).find((secret) => typeof secret.scenarioId === 'number')?.scenarioId ?? 0;
+  const distribution = params.distribution ?? distribuicoes.get(params.code);
+  if (!distribution) {
+    throw new RoomError(
+      'sorteio-perdido',
+      'Os dados da rodada se perderam neste aparelho. Não é possível publicar o resultado.',
+    );
+  }
+
+  const votesSnapshot = await get(ref(db, `${roomPath(params.code)}/votes`));
+
+  const porJogador = new Map(distribution.assignments.map((a) => [a.playerId, a]));
+  const spyIds = distribution.assignments.filter((a) => a.isSpy).map((a) => a.playerId);
+  const scenarioId = distribution.scenarioId;
 
   const rawVotes = (votesSnapshot.val() as Record<string, { targetUid: string; submittedAt: number }> | null) ?? {};
   const ballots: Ballot[] = Object.entries(rawVotes).map(([voterId, vote]) => ({
@@ -341,10 +394,10 @@ export async function finalizeRound(params: {
 
   const assignments: PublicResult['assignments'] = {};
   for (const uid of params.playerIds) {
-    const secret = secrets[uid];
-    assignments[uid] = secret?.isSpy
+    const assignment = porJogador.get(uid);
+    assignments[uid] = assignment?.isSpy
       ? { isSpy: true }
-      : { isSpy: false, ...(secret?.role ? { role: secret.role } : {}) };
+      : { isSpy: false, ...(assignment?.role ? { role: assignment.role } : {}) };
   }
 
   const publicBallots: PublicResult['ballots'] = {};

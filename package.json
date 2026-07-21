@@ -18,6 +18,7 @@
     "test": "vitest run --project=unit",
     "test:unit": "vitest run --project=unit",
     "test:rules": "firebase emulators:exec --only database --project spyclaudio-b8252 \"vitest run --project=rules\"",
+    "test:integration": "firebase emulators:exec --only database,auth --project spyclaudio-b8252 \"vitest run --project=integration\"",
     "test:e2e": "playwright test --project=android-chrome --project=iphone-safari --project=viewport-320 tests/e2e/single-device.spec.ts",
     "test:e2e:online": "firebase emulators:exec --only database,auth --project spyclaudio-b8252 \"node scripts/run-e2e-online.mjs\"",
     "emulators": "firebase emulators:start --project spyclaudio-b8252",

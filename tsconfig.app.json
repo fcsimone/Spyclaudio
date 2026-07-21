@@ -26,5 +26,5 @@
     "verbatimModuleSyntax": true,
     "erasableSyntaxOnly": true
   },
-  "include": ["src", "tests/unit", "tests/rules"]
+  "include": ["src", "tests/unit", "tests/rules", "tests/integration"]
 }

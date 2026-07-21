@@ -61,6 +61,7 @@ HTTPS_PROXY= HTTP_PROXY= npm run test:rules
 | `npm run check:rules` | Verificação estática de `database.rules.json` |
 | `npm run test:unit` | Testes unitários (motor, votação, nomes, modo um aparelho) |
 | `npm run test:rules` | Testes das regras do banco, com emulador |
+| `npm run test:integration` | Fluxo online completo contra os emuladores, sem navegador |
 | `npm run test:e2e` | E2E do modo um aparelho, em viewports mobile |
 | `npm run test:e2e:online` | E2E com vários aparelhos, com emuladores |
 | `npm run validate` | Lint + tipos + regras + unitários + build |
@@ -94,6 +95,19 @@ tests/        unit, rules, e2e
 
 O motor do jogo (`src/game/`) não conhece React nem Firebase, e é onde estão as regras
 testáveis do jogo.
+
+### Camadas de teste
+
+| Camada | O que cobre | Precisa de |
+| --- | --- | --- |
+| `unit` | motor do jogo, apuração, nomes e o modo de um aparelho | nada |
+| `rules` | cada permissão e cada negação de `database.rules.json` | emulador |
+| `integration` | o fluxo online real (`src/firebase/rooms.ts`) ponta a ponta | emuladores |
+| `e2e` | a interface no navegador, em viewports mobile | navegadores |
+
+A camada de integração existe porque as regras e o cliente podem estar corretos
+isoladamente e ainda assim não funcionarem juntos — foi ela que revelou, por exemplo,
+que o anfitrião não conseguia publicar o resultado por tentar reler os papéis do banco.
 
 ## Segurança
 

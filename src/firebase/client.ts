@@ -36,7 +36,19 @@ export function getFirebaseAuth(): Auth {
   return auth;
 }
 
+let databaseOverride: Database | null = null;
+
+/**
+ * Ponto de injeção usado apenas pelos testes de integração com emuladores, onde
+ * é preciso agir como vários jogadores diferentes no mesmo processo.
+ * Em produção nunca é chamado.
+ */
+export function setDatabaseForTests(instance: Database | null): void {
+  databaseOverride = instance;
+}
+
 export function getFirebaseDatabase(): Database {
+  if (databaseOverride) return databaseOverride;
   if (!database) {
     database = getDatabase(getFirebaseApp());
     if (emulatorConfig.enabled) {

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { get, ref } from 'firebase/database';
-import { getFirebaseDatabase } from '../firebase/client';
 import {
+  readServerOffset,
   subscribeMeta,
   subscribePlayers,
   subscribeResult,
@@ -50,8 +49,8 @@ export function useRoom(code: string, uid: string | null): RoomState {
 
   useEffect(() => {
     let active = true;
-    void get(ref(getFirebaseDatabase(), '.info/serverTimeOffset')).then((snapshot) => {
-      if (active) setServerOffset((snapshot.val() as number | null) ?? 0);
+    void readServerOffset().then((offset) => {
+      if (active) setServerOffset(offset);
     });
     return () => {
       active = false;

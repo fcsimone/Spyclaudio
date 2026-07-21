@@ -53,7 +53,7 @@
               ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20 && (!data.exists() || data.val() == newData.val())"
             },
             "normalizedName": {
-              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20 && root.child('rooms').child($roomCode).child('normalizedNames').child(newData.val()).val() == $uid && (!data.exists() || data.val() == newData.val())"
+              ".validate": "newData.isString() && newData.val().length >= 1 && newData.val().length <= 20 && newData.parent().parent().parent().child('normalizedNames').child(newData.val()).val() == $uid && (!data.exists() || data.val() == newData.val())"
             },
             "joinedAt": {
               ".validate": "(newData.val() == now && !data.exists()) || data.val() == newData.val()"
@@ -72,7 +72,7 @@
 
         "normalizedNames": {
           "$normalizedName": {
-            ".write": "auth != null && root.child('rooms').child($roomCode).child('meta').child('status').val() == 'lobby' && ((!data.exists() && newData.val() == auth.uid) || data.val() == auth.uid || root.child('rooms').child($roomCode).child('meta').child('hostUid').val() == auth.uid)",
+            ".write": "auth != null && newData.parent().parent().child('meta').child('status').val() == 'lobby' && ((!data.exists() && newData.val() == auth.uid) || data.val() == auth.uid || newData.parent().parent().child('meta').child('hostUid').val() == auth.uid)",
             ".validate": "!newData.exists() || (newData.isString() && newData.val().length >= 20 && newData.val().length <= 128)"
           }
         },
